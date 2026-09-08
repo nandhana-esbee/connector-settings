@@ -93,6 +93,16 @@ print(f"Jira Server: {settings.jira.server_url}")
 print(f"SharePoint Site: {settings.sharepoint.site_url}")
 ```
 
+### 3. Running Web Server (FastAPI / Uvicorn)
+
+Launch the web API status service and interactive dashboard:
+
+```bash
+uvicorn main:app --reload
+```
+
+Open `http://127.0.0.1:8000` in your browser to view the HTML Dashboard & API Swagger docs at `/docs`.
+
 ---
 
 ## 📂 Project Structure
