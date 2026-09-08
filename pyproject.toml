@@ -1,0 +1,7 @@
+[project]
+name = "connector"
+version = "0.1.0"
+description = "Centralized settings module for connecting Microsoft Teams, Jira, SharePoint, and custom connectors."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
