@@ -40,6 +40,9 @@ class ConnectorSettings:
     teams: TeamsSettings = field(default_factory=TeamsSettings)
     jira: JiraSettings = field(default_factory=JiraSettings)
     sharepoint: SharePointSettings = field(default_factory=SharePointSettings)
+    jira_client_id: Optional[str] = None
+    jira_client_secret: Optional[str] = None
+    jira_redirect_uri: Optional[str] = None
     custom: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -56,6 +59,9 @@ class ConnectorSettings:
             teams=TeamsSettings.from_env(),
             jira=JiraSettings.from_env(),
             sharepoint=SharePointSettings.from_env(),
+            jira_client_id=os.getenv("JIRA_CLIENT_ID"),
+            jira_client_secret=os.getenv("JIRA_CLIENT_SECRET"),
+            jira_redirect_uri=os.getenv("JIRA_REDIRECT_URI", "http://127.0.0.1:8000/auth/jira/callback"),
         )
 
     def register_custom_connector(self, name: str, config: Any) -> None:
@@ -212,6 +218,9 @@ class ConnectorSettings:
             f"JIRA_USER_EMAIL={self.jira.user_email or ''}",
             f"JIRA_API_TOKEN={self.jira.api_token or ''}",
             f"JIRA_DEFAULT_PROJECT_KEY={self.jira.project_key or ''}",
+            f"JIRA_CLIENT_ID={self.jira_client_id or ''}",
+            f"JIRA_CLIENT_SECRET={self.jira_client_secret or ''}",
+            f"JIRA_REDIRECT_URI={self.jira_redirect_uri or 'http://127.0.0.1:8000/auth/jira/callback'}",
             "",
             "# Microsoft SharePoint Configuration",
             f"SHAREPOINT_SITE_URL={self.sharepoint.site_url or ''}",
@@ -245,6 +254,7 @@ class ConnectorSettings:
 
     def to_dict(self, mask_secrets: bool = True) -> Dict[str, Any]:
         """Export full configuration tree as a dictionary."""
+        masked_secret = "********" if mask_secrets and self.jira_client_secret else self.jira_client_secret
         return {
             "environment": self.environment,
             "log_level": self.log_level,
@@ -252,6 +262,12 @@ class ConnectorSettings:
                 "teams": self.teams.to_dict(mask_secrets=mask_secrets),
                 "jira": self.jira.to_dict(mask_secrets=mask_secrets),
                 "sharepoint": self.sharepoint.to_dict(mask_secrets=mask_secrets),
+                "jira_oauth": {
+                    "client_id": self.jira_client_id,
+                    "client_secret": masked_secret,
+                    "redirect_uri": self.jira_redirect_uri,
+                    "is_configured": bool(self.jira_client_id and self.jira_client_secret and self.jira_redirect_uri),
+                },
                 "custom": self.custom,
             },
             "status": self.status_summary(),

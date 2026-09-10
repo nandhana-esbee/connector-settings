@@ -1,5 +1,6 @@
 from .base import ConnectorSettings, load_env_file
-from .integrations import TeamsSettings, JiraSettings, SharePointSettings
+from .integrations import TeamsSettings, JiraSettings, SharePointSettings, JiraOAuthService
+from .oauth_store import OAuthStore, JiraConnectionRecord
 
 __all__ = [
     "ConnectorSettings",
@@ -7,5 +8,8 @@ __all__ = [
     "TeamsSettings",
     "JiraSettings",
     "SharePointSettings",
+    "JiraOAuthService",
+    "OAuthStore",
+    "JiraConnectionRecord",
 ]
-__version__ = "0.1.0"
+__version__ = "0.2.2"

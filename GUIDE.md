@@ -103,23 +103,56 @@ Teams integrations support two access modes:
 
 ---
 
-### 2. Atlassian Jira (`JIRA_*`)
+### 2. Atlassian Jira Cloud OAuth 2.0 (3LO) & API Token (`JIRA_*`)
 
-The Jira connector configures authentication for Atlassian Jira Cloud or Data Center.
+The Jira connector supports **Atlassian OAuth 2.0 (3LO - Three-Legged OAuth)** for per-user cloud authorization, as well as direct API Token configuration.
 
-#### Setup Instructions:
+#### Method A: Jira Cloud OAuth 2.0 (3LO) [Recommended for Multi-User]
+
+With OAuth 2.0 (3LO), users connect their own Jira accounts directly through the browser without sharing passwords or API tokens.
+
+##### Step-by-Step Setup in Atlassian Developer Console:
+1. Go to the [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/).
+2. Click **Create** -> **OAuth 2.0 integration**.
+3. Name your app (e.g. `Connector User Story Integration`) and accept the terms.
+4. Under **Permissions**, click **Add** next to **Jira API**:
+   - Enable **View user profile** (`read:jira-user`)
+   - Enable **Read Jira work** (`read:jira-work`)
+   - Enable **Manage Jira work** (`write:jira-work`)
+   - Enable **Offline access** (`offline_access` under User identity API permissions)
+5. Under **Authorization**, click **Add** next to **OAuth 2.0 (3LO)**:
+   - Set **Callback URL**: `http://localhost:8000/auth/jira/callback` (or your production callback URL).
+6. Under **Settings**, copy your **Client ID** and **Secret**.
+7. Configure in `.env`:
+   ```env
+   JIRA_CLIENT_ID=your-atlassian-oauth-client-id
+   JIRA_CLIENT_SECRET=your-atlassian-oauth-client-secret
+   JIRA_REDIRECT_URI=http://localhost:8000/auth/jira/callback
+   ```
+
+##### Key OAuth Endpoints:
+- `GET /auth/jira`: Starts OAuth 2.0 authorization flow and redirects browser to Atlassian.
+- `GET /auth/jira/callback`: Receives authorization code, validates CSRF state, exchanges for tokens, and securely encrypts/persists them per user in SQLite.
+- `GET /api/jira/connection`: Checks current user's connection status, site URL, and account email.
+- `POST /api/jira/disconnect`: Revokes and deletes stored tokens for the active user.
+- `GET /api/jira/projects`: Retrieves projects accessible to the connected user.
+- `POST /api/jira/issues`: Creates a Jira Story or Issue with automatic ADF format conversion.
+
+#### Method B: Direct API Token (Service Account Fallback)
 1. Log in to [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
-2. Click **Create API token**, label it (e.g., `connector-integration`), and copy the generated token.
-3. Obtain your Atlassian domain URL (e.g., `https://your-company.atlassian.net`).
-4. Note down your target Jira Project Key (e.g., `PROJ`, `KAN`, `SUP`).
+2. Click **Create API token**, label it, and copy the generated token.
+3. Configure in `.env`:
+   ```env
+   JIRA_SERVER_URL=https://your-company.atlassian.net
+   JIRA_USER_EMAIL=developer@yourcompany.com
+   JIRA_API_TOKEN=ATATT3xFfGF0...
+   JIRA_DEFAULT_PROJECT_KEY=PROJ
+   ```
 
-#### Configuration:
-```env
-JIRA_SERVER_URL=https://your-company.atlassian.net
-JIRA_USER_EMAIL=developer@yourcompany.com
-JIRA_API_TOKEN=your_jira_api_token
-JIRA_DEFAULT_PROJECT_KEY=PROJ
-```
+#### Automatic Project Discovery & Issue Creation:
+When connected to Jira via OAuth 2.0 or API token:
+- Automatically discovers workspace projects, project keys, issue types, and leads.
+- Allows immediate creation and export of generated user stories to Jira with live clickable issue links.
 
 ---
 
@@ -211,6 +244,7 @@ settings.save_to_env(".env")
 | `/docs` | `GET` | Swagger Interactive API Documentation |
 | `/api/status` | `GET` | Returns boolean status for all connectors |
 | `/api/settings` | `GET` | Returns full settings tree (secrets masked) |
+| `/api/connectors/jira/projects` | `GET` | Fetches complete metadata for every project in Jira |
 | `/api/connectors/teams` | `POST` | Update Teams settings & test connection |
 | `/api/connectors/teams/test` | `POST` | Run live connection test for Teams |
 | `/api/connectors/jira` | `POST` | Update Jira settings & test connection |
