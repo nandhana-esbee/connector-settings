@@ -51,6 +51,5 @@ async def run_cli():
         print(f"\n❌ ERROR: {str(e)}")
         sys.exit(1)
 
-
 if __name__ == "__main__":
     asyncio.run(run_cli())

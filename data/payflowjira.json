@@ -1,0 +1,111 @@
+{
+  "projects": [
+    {
+      "key": "PAYFLOW",
+      "name": "PayFlow Digital Wallet",
+      "projectTypeKey": "software",
+      "description": "Peer-to-peer payments, merchant checkout, virtual debit cards, and multi-currency balances.",
+      "components": [
+        {"name": "P2P Payments & Transfers", "description": "Instant contact transfers, QR scanning, and split-bill workflows"},
+        {"name": "Virtual Cards & Wallet", "description": "Tokenized card generation, spend limits, and freezing functionality"},
+        {"name": "Multi-Currency Engine", "description": "FX rate conversions, foreign currency wallets, and cross-border settlements"},
+        {"name": "Security & Biometrics", "description": "Device authorization, step-up biometric verification, and session management"}
+      ],
+      "versions": [
+        {"name": "v1.0.0", "description": "Initial digital wallet MVP"},
+        {"name": "v1.1.0", "description": "Multi-currency wallet release"}
+      ],
+      "issues": [
+        {
+          "summary": "QR code merchant scan and pay",
+          "description": "Enable camera scanner to detect EMVCo-compliant QR codes and prefill transaction amount.",
+          "issue_type": "Story",
+          "component": "P2P Payments & Transfers"
+        },
+        {
+          "summary": "Split bill with contacts",
+          "description": "Allow users to select multiple registered contacts and divide an existing transaction evenly.",
+          "issue_type": "Story",
+          "component": "P2P Payments & Transfers"
+        },
+        {
+          "summary": "Issue instant virtual debit card",
+          "description": "Generate dynamic CVV and 16-digit card number backed by the primary balance.",
+          "issue_type": "Story",
+          "component": "Virtual Cards & Wallet"
+        },
+        {
+          "summary": "Card freeze and spending controls",
+          "description": "Provide toggles to disable online transactions, ATM withdrawals, and set monthly limits.",
+          "issue_type": "Story",
+          "component": "Virtual Cards & Wallet"
+        },
+        {
+          "summary": "Real-time FX conversion preview",
+          "description": "Fetch live foreign exchange rates and show estimated transfer fees before conversion.",
+          "issue_type": "Story",
+          "component": "Multi-Currency Engine"
+        },
+        {
+          "summary": "Biometric transaction confirmation",
+          "description": "Prompt Face ID or fingerprint scan for transactions exceeding configured risk thresholds.",
+          "issue_type": "Story",
+          "component": "Security & Biometrics"
+        }
+      ]
+    },
+    {
+      "key": "CAPLEND",
+      "name": "CapLend SME Underwriting",
+      "projectTypeKey": "software",
+      "description": "Automated lending platform providing working capital lines and term loans to small businesses.",
+      "components": [
+        {"name": "Merchant Onboarding", "description": "Business verification, KYB checks, and tax ID lookups"},
+        {"name": "Open Banking Ingestion", "description": "Plaid/Yodlee bank statement parsing and cash flow analysis"},
+        {"name": "Automated Underwriting Engine", "description": "Credit scoring algorithms, debt-service coverage ratio calculations, and offer generation"},
+        {"name": "Disbursement & Servicing", "description": "ACH loan payouts, automated repayment schedules, and delinquency monitoring"}
+      ],
+      "versions": [
+        {"name": "v1.0.0", "description": "SME credit engine MVP"}
+      ],
+      "issues": [
+        {
+          "summary": "Automated business registry lookup",
+          "description": "Verify registered company registration numbers against national corporate registries via API.",
+          "issue_type": "Story",
+          "component": "Merchant Onboarding"
+        },
+        {
+          "summary": "Plaid account linking and transaction fetch",
+          "description": "Integrate Plaid Link to ingest 12 months of primary business checking account history.",
+          "issue_type": "Story",
+          "component": "Open Banking Ingestion"
+        },
+        {
+          "summary": "Compute Debt Service Coverage Ratio (DSCR)",
+          "description": "Calculate monthly operating cash flows against existing debt obligations to derive DSCR.",
+          "issue_type": "Story",
+          "component": "Automated Underwriting Engine"
+        },
+        {
+          "summary": "Generate loan decision and credit limit",
+          "description": "Evaluate automated credit policy rules and output approved capital limits and interest tiers.",
+          "issue_type": "Story",
+          "component": "Automated Underwriting Engine"
+        },
+        {
+          "summary": "Same-day ACH disbursement pipeline",
+          "description": "Trigger NACHA payment file creation upon execution of the digital loan agreement.",
+          "issue_type": "Story",
+          "component": "Disbursement & Servicing"
+        },
+        {
+          "summary": "Automated direct debit repayment schedule",
+          "description": "Schedule weekly/monthly automated debits with webhooks handling failed payment retries.",
+          "issue_type": "Story",
+          "component": "Disbursement & Servicing"
+        }
+      ]
+    }
+  ]
+}
