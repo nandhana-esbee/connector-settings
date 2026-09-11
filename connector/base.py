@@ -6,6 +6,7 @@ from typing import Dict, Any, Optional
 from .integrations.teams import TeamsSettings
 from .integrations.jira import JiraSettings
 from .integrations.sharepoint import SharePointSettings
+from .integrations.appminer import AppMinerSettings
 
 
 def load_env_file(dotenv_path: str = ".env") -> None:
@@ -40,6 +41,7 @@ class ConnectorSettings:
     teams: TeamsSettings = field(default_factory=TeamsSettings)
     jira: JiraSettings = field(default_factory=JiraSettings)
     sharepoint: SharePointSettings = field(default_factory=SharePointSettings)
+    appminer: AppMinerSettings = field(default_factory=AppMinerSettings)
     jira_client_id: Optional[str] = None
     jira_client_secret: Optional[str] = None
     jira_redirect_uri: Optional[str] = None
@@ -59,6 +61,7 @@ class ConnectorSettings:
             teams=TeamsSettings.from_env(),
             jira=JiraSettings.from_env(),
             sharepoint=SharePointSettings.from_env(),
+            appminer=AppMinerSettings.from_env(),
             jira_client_id=os.getenv("JIRA_CLIENT_ID"),
             jira_client_secret=os.getenv("JIRA_CLIENT_SECRET"),
             jira_redirect_uri=os.getenv("JIRA_REDIRECT_URI", "http://127.0.0.1:8000/auth/jira/callback"),
@@ -74,6 +77,7 @@ class ConnectorSettings:
             "teams": self.teams.is_configured(),
             "jira": self.jira.is_configured(),
             "sharepoint": self.sharepoint.is_configured(),
+            "appminer": self.appminer.is_configured(),
             **{name: True for name in self.custom},
         }
 
@@ -196,6 +200,42 @@ class ConnectorSettings:
 
         return self.sharepoint
 
+    def update_appminer(
+        self,
+        neo4j_uri: Optional[str] = None,
+        neo4j_username: Optional[str] = None,
+        neo4j_password: Optional[str] = None,
+        neo4j_database: Optional[str] = None,
+    ) -> AppMinerSettings:
+        """Update AppMiner Neo4j settings and set corresponding environment variables."""
+        if neo4j_uri is not None:
+            self.appminer.neo4j_uri = neo4j_uri.strip() or None
+            if self.appminer.neo4j_uri:
+                os.environ["NEO4J_URI"] = self.appminer.neo4j_uri
+            elif "NEO4J_URI" in os.environ:
+                del os.environ["NEO4J_URI"]
+
+        if neo4j_username is not None:
+            self.appminer.neo4j_username = neo4j_username.strip() or None
+            if self.appminer.neo4j_username:
+                os.environ["NEO4J_USERNAME"] = self.appminer.neo4j_username
+            elif "NEO4J_USERNAME" in os.environ:
+                del os.environ["NEO4J_USERNAME"]
+
+        if neo4j_password is not None:
+            self.appminer.neo4j_password = neo4j_password.strip() or None
+            if self.appminer.neo4j_password:
+                os.environ["NEO4J_PASSWORD"] = self.appminer.neo4j_password
+            elif "NEO4J_PASSWORD" in os.environ:
+                del os.environ["NEO4J_PASSWORD"]
+
+        if neo4j_database is not None:
+            self.appminer.neo4j_database = neo4j_database.strip() or "neo4j"
+            os.environ["NEO4J_DATABASE"] = self.appminer.neo4j_database
+
+        return self.appminer
+
+
     def save_to_env(self, env_path: str = ".env") -> None:
         """
         Persist current settings to a .env file.
@@ -229,6 +269,12 @@ class ConnectorSettings:
             f"SHAREPOINT_CLIENT_SECRET={self.sharepoint.client_secret or ''}",
             f"SHAREPOINT_DOCUMENT_LIBRARY={self.sharepoint.document_library or 'Shared Documents'}",
             "",
+            "# AppMiner Neo4j Database Configuration",
+            f"NEO4J_URI={self.appminer.neo4j_uri or ''}",
+            f"NEO4J_USERNAME={self.appminer.neo4j_username or ''}",
+            f"NEO4J_PASSWORD={self.appminer.neo4j_password or ''}",
+            f"NEO4J_DATABASE={self.appminer.neo4j_database or 'neo4j'}",
+            "",
         ]
 
         with open(env_path, "w", encoding="utf-8") as f:
@@ -240,6 +286,7 @@ class ConnectorSettings:
             "teams": self.teams.test_connection(),
             "jira": self.jira.test_connection(),
             "sharepoint": self.sharepoint.test_connection(),
+            "appminer": self.appminer.test_connection(),
         }
         
         results = await asyncio.gather(*tasks.values(), return_exceptions=True)
@@ -262,6 +309,7 @@ class ConnectorSettings:
                 "teams": self.teams.to_dict(mask_secrets=mask_secrets),
                 "jira": self.jira.to_dict(mask_secrets=mask_secrets),
                 "sharepoint": self.sharepoint.to_dict(mask_secrets=mask_secrets),
+                "appminer": self.appminer.to_dict(mask_secrets=mask_secrets),
                 "jira_oauth": {
                     "client_id": self.jira_client_id,
                     "client_secret": masked_secret,

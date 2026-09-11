@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "key": "APPMIN",
+      "name": "AppMiner Intelligence Platform",
+      "projectTypeKey": "software",
+      "description": "Auto-provisioned project for AppMiner analytics, site flows, and agentic pipelines.",
+      "components": [
+        {"name": "Frontend Dashboard", "description": "UI components and navigation flows"},
+        {"name": "Agentic Pipeline", "description": "LLM agents and background analysis workers"},
+        {"name": "Neo4j Database", "description": "Graph database schema and graph queries"}
+      ],
+      "versions": [
+        {"name": "v1.0.0", "description": "Initial release"},
+        {"name": "v1.1.0", "description": "Neo4j graph integration update"}
+      ],
+      "issues": [
+        {
+          "summary": "Configure Neo4j Graph DB Connection Point",
+          "description": "Setup Neo4j database URI, username, and password credentials in connector settings.",
+          "issue_type": "Task",
+          "component": "Neo4j Database"
+        },
+        {
+          "summary": "Implement AppMiner Flow Discovery Agent",
+          "description": "As a developer, I want an agentic pipeline to crawl application flows and record step summaries.",
+          "issue_type": "Story",
+          "component": "Agentic Pipeline"
+        },
+        {
+          "summary": "Build Interactive Connector Dashboard",
+          "description": "Create a unified web interface for managing Jira, Teams, SharePoint, and AppMiner connectors.",
+          "issue_type": "Story",
+          "component": "Frontend Dashboard"
+        }
+      ]
+    }
+  ]
+}

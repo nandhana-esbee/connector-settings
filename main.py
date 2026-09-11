@@ -4,11 +4,13 @@ import secrets
 import urllib.parse
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response, File, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 import uvicorn
 
 from connector import ConnectorSettings, OAuthStore, JiraOAuthService
+from admin.jira_provisioner import JiraAdminProvisioner
+
 
 # Initialize FastAPI App
 app = FastAPI(
@@ -84,6 +86,16 @@ class SharePointUpdateRequest(BaseModel):
     persist_to_env: bool = Field(True, description="Save changes to .env file")
 
 
+class AppMinerUpdateRequest(BaseModel):
+    neo4j_uri: Optional[str] = Field(None, description="Neo4j Connection URI (e.g. neo4j+s://5a9966fc.databases.neo4j.io)")
+    neo4j_username: Optional[str] = Field(None, description="Neo4j Database Username")
+    neo4j_password: Optional[str] = Field(None, description="Neo4j Database Password")
+    neo4j_database: Optional[str] = Field("neo4j", description="Target Neo4j Database Name")
+    test_now: bool = Field(True, description="Immediately test connection after saving")
+    persist_to_env: bool = Field(True, description="Save changes to .env file")
+
+
+
 # ---------------------------------------------------------
 # Interactive Web Dashboard (HTML / CSS / JS)
 # ---------------------------------------------------------
@@ -96,6 +108,8 @@ def get_dashboard(request: Request):
     teams = raw_config["connectors"]["teams"]
     jira = raw_config["connectors"]["jira"]
     sp = raw_config["connectors"]["sharepoint"]
+    appminer = raw_config["connectors"]["appminer"]
+
 
     user_id = getattr(request.state, "user_id", "")
     oauth_conn = oauth_store.get_connection(user_id) if user_id else None
@@ -556,6 +570,8 @@ def get_dashboard(request: Request):
                 <button class="tab-btn active" onclick="showTab('jira')">📋 Atlassian Jira</button>
                 <button class="tab-btn" onclick="showTab('teams')">💬 Microsoft Teams</button>
                 <button class="tab-btn" onclick="showTab('sharepoint')">📁 SharePoint</button>
+                <button class="tab-btn" onclick="showTab('appminer')">⚡ AppMiner (Neo4j)</button>
+                <button class="tab-btn" onclick="showTab('admin')">🛠️ Admin Provisioner</button>
                 <button class="tab-btn" onclick="showTab('overview')">📊 Overview & JSON</button>
             </div>
 
@@ -799,6 +815,87 @@ def get_dashboard(request: Request):
                 </div>
             </div>
 
+            <!-- APPMINER (NEO4J) TAB -->
+            <div id="tab-appminer" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">AppMiner - Neo4j Graph Database Integration</div>
+                        <span id="appminer-badge" class="status-pill {'status-configured' if appminer.get('is_configured') else 'status-unconfigured'}">
+                            {'CONNECTED / READY' if appminer.get('is_configured') else 'NOT CONFIGURED'}
+                        </span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+                        Connect to Neo4j Cloud / Self-Hosted database via Bolt protocol and fetch Graph Nodes and Relationships for AppMiner data processing.
+                    </p>
+                    <form id="appminer-form" onsubmit="event.preventDefault(); saveAndTest('appminer');">
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label for="neo4j_uri">Neo4j Connection URI</label>
+                                <input type="text" id="neo4j_uri" value="{appminer.get('neo4j_uri') or ''}" placeholder="neo4j+s://5a9966fc.databases.neo4j.io">
+                            </div>
+                            <div class="form-group">
+                                <label for="neo4j_username">Database Username</label>
+                                <input type="text" id="neo4j_username" value="{appminer.get('neo4j_username') or ''}" placeholder="neo4j">
+                            </div>
+                            <div class="form-group">
+                                <label for="neo4j_password">Database Password</label>
+                                <input type="password" id="neo4j_password" value="{appminer.get('neo4j_password') or ''}" placeholder="••••••••••••••••">
+                            </div>
+                            <div class="form-group full">
+                                <label for="neo4j_database">Target Database Name</label>
+                                <input type="text" id="neo4j_database" value="{appminer.get('neo4j_database') or 'neo4j'}" placeholder="neo4j">
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn btn-secondary" onclick="testOnly('appminer')">⚡ Test Connection</button>
+                            <button type="button" class="btn btn-purple" onclick="fetchAppMinerData()">🔍 Fetch Neo4j Data</button>
+                            <button type="submit" class="btn btn-primary">💾 Save & Test Connection</button>
+                        </div>
+                    </form>
+                    <div id="appminer-result" class="result-box"></div>
+
+                    <!-- APPMINER FETCHED DATA CONTAINER -->
+                    <div id="appminer-data-container" style="margin-top: 24px; display: none;">
+                        <div class="projects-header">
+                            <h3 style="color: #fff; font-size: 1.15rem;">Fetched Graph Records from Neo4j</h3>
+                            <span id="appminer-record-count" class="projects-count">0 Records</span>
+                        </div>
+                        <pre id="appminer-data-preview" style="background: var(--bg-input); padding: 18px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid var(--border-color); color: #a7f3d0; overflow-x: auto; max-height: 450px;"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN PROVISIONER TAB -->
+            <div id="tab-admin" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🛠️ Admin Jira Project Provisioner</div>
+                        <span class="status-pill status-configured">CONNECTED TO MY JIRA</span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+                        Upload any JSON project specification file to automatically create Projects, Components, Versions, and Issues directly in your connected Jira instance.
+                    </p>
+
+                    <!-- SINGLE JSON FILE UPLOAD BOX -->
+                    <div style="background: var(--bg-input); padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 24px;">
+                        <label for="admin_upload_file" style="font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 10px; display: block;">
+                            📁 Select JSON File to Upload & Provision
+                        </label>
+                        <form id="admin-upload-form" onsubmit="event.preventDefault(); uploadAndProvisionJira();">
+                            <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                                <input type="file" id="admin_upload_file" accept=".json" required style="flex: 1; min-width: 250px; padding: 10px;">
+                                <button type="submit" class="btn btn-success" style="padding: 12px 24px; font-size: 1rem;">🚀 Upload & Provision in Jira</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="admin-result" class="result-box"></div>
+                </div>
+            </div>
+
+
+
+
             <!-- OVERVIEW TAB -->
             <div id="tab-overview" class="tab-content">
                 <div class="card">
@@ -824,7 +921,7 @@ def get_dashboard(request: Request):
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 
-                const btnIndex = ['jira', 'teams', 'sharepoint', 'overview'].indexOf(name);
+                const btnIndex = ['jira', 'teams', 'sharepoint', 'appminer', 'admin', 'overview'].indexOf(name);
                 if (btnIndex >= 0) {{
                     document.querySelectorAll('.tab-btn')[btnIndex].classList.add('active');
                 }}
@@ -952,6 +1049,11 @@ def get_dashboard(request: Request):
                     payload.client_id = document.getElementById('sp_client_id').value;
                     payload.client_secret = document.getElementById('sp_client_secret').value;
                     payload.document_library = document.getElementById('sp_document_library').value;
+                }} else if (service === 'appminer') {{
+                    payload.neo4j_uri = document.getElementById('neo4j_uri').value;
+                    payload.neo4j_username = document.getElementById('neo4j_username').value;
+                    payload.neo4j_password = document.getElementById('neo4j_password').value;
+                    payload.neo4j_database = document.getElementById('neo4j_database').value;
                 }}
 
                 try {{
@@ -1010,6 +1112,99 @@ def get_dashboard(request: Request):
                 }} catch (err) {{
                     resultBox.className = 'result-box error';
                     resultBox.innerText = '❌ Error testing connection: ' + err.message;
+                }}
+            }}
+
+            async function fetchAppMinerData() {{
+                const resultBox = document.getElementById('appminer-result');
+                const dataContainer = document.getElementById('appminer-data-container');
+                const dataPreview = document.getElementById('appminer-data-preview');
+                const countBadge = document.getElementById('appminer-record-count');
+
+                resultBox.style.display = 'block';
+                resultBox.className = 'result-box';
+                resultBox.innerText = '⏳ Querying Neo4j database for AppMiner graph data...';
+
+                try {{
+                    const res = await fetch('/api/connectors/appminer/fetch');
+                    const data = await res.json();
+                    if (data.success) {{
+                        resultBox.className = 'result-box success';
+                        resultBox.innerText = `✅ Successfully fetched ${{data.record_count}} record(s) from Neo4j!\\nQuery: ${{data.query}}`;
+                        
+                        if (dataContainer) dataContainer.style.display = 'block';
+                        if (countBadge) countBadge.innerText = `${{data.record_count}} Records`;
+                        if (dataPreview) dataPreview.innerText = JSON.stringify(data.data, null, 2);
+                        
+                        updateBadge('appminer', true);
+                    }} else {{
+                        resultBox.className = 'result-box error';
+                        resultBox.innerText = '❌ FAILED TO FETCH NEO4J DATA:\\n' + (data.error || JSON.stringify(data, null, 2));
+                    }}
+                }} catch (e) {{
+                    resultBox.className = 'result-box error';
+                    resultBox.innerText = '❌ Error fetching Neo4j data: ' + e.message;
+                }}
+            }}
+
+            async function uploadAndProvisionJira() {{
+                const resultBox = document.getElementById('admin-result');
+                const fileInput = document.getElementById('admin_upload_file');
+                if (!fileInput.files || fileInput.files.length === 0) {{
+                    alert('Please select a JSON file to upload.');
+                    return;
+                }}
+
+                const file = fileInput.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+
+                resultBox.style.display = 'block';
+                resultBox.className = 'result-box';
+                resultBox.innerText = `⏳ Uploading '${{file.name}}' and provisioning projects in your Jira workspace...`;
+
+                try {{
+                    const res = await fetch('/api/admin/jira/upload', {{
+                        method: 'POST',
+                        body: formData
+                    }});
+                    const data = await res.json();
+                    if (data.success) {{
+                        resultBox.className = 'result-box success';
+                        resultBox.innerText = `✅ UPLOAD & PROVISIONING COMPLETE:\\n` + JSON.stringify(data, null, 2);
+                    }} else {{
+                        resultBox.className = 'result-box error';
+                        resultBox.innerText = '❌ PROVISIONING FAILED:\\n' + (data.error || JSON.stringify(data, null, 2));
+                    }}
+                }} catch (e) {{
+                    resultBox.className = 'result-box error';
+                    resultBox.innerText = '❌ Error uploading file: ' + e.message;
+                }}
+            }}
+
+            async function runAdminProvisioning() {{
+                const resultBox = document.getElementById('admin-result');
+                const fileName = document.getElementById('admin_json_file').value || 'jira_projects.json';
+
+                resultBox.style.display = 'block';
+                resultBox.className = 'result-box';
+                resultBox.innerText = `⏳ Reading 'data/${{fileName}}' and provisioning projects in your Jira workspace...`;
+
+                try {{
+                    const res = await fetch('/api/admin/jira/provision?file_name=' + encodeURIComponent(fileName), {{
+                        method: 'POST'
+                    }});
+                    const data = await res.json();
+                    if (data.success) {{
+                        resultBox.className = 'result-box success';
+                        resultBox.innerText = `✅ PROVISIONING COMPLETE:\\n` + JSON.stringify(data, null, 2);
+                    }} else {{
+                        resultBox.className = 'result-box error';
+                        resultBox.innerText = '❌ PROVISIONING FAILED:\\n' + (data.error || JSON.stringify(data, null, 2));
+                    }}
+                }} catch (e) {{
+                    resultBox.className = 'result-box error';
+                    resultBox.innerText = '❌ Error executing provisioner: ' + e.message;
                 }}
             }}
 
@@ -1527,6 +1722,74 @@ async def update_sharepoint_endpoint(req: SharePointUpdateRequest):
 async def test_sharepoint_endpoint():
     """Run live connection test for Microsoft SharePoint."""
     return await settings.sharepoint.test_connection()
+
+
+@app.post("/api/connectors/appminer")
+async def update_appminer_endpoint(req: AppMinerUpdateRequest):
+    """
+    Update AppMiner Neo4j configuration settings, persist to .env, and optionally test connection.
+    """
+    settings.update_appminer(
+        neo4j_uri=req.neo4j_uri,
+        neo4j_username=req.neo4j_username,
+        neo4j_password=req.neo4j_password,
+        neo4j_database=req.neo4j_database,
+    )
+
+    if req.persist_to_env:
+        settings.save_to_env(".env")
+
+    test_res = None
+    if req.test_now and settings.appminer.is_configured():
+        test_res = await settings.appminer.test_connection()
+
+    return {
+        "message": "AppMiner Neo4j settings updated successfully.",
+        "configured": settings.appminer.is_configured(),
+        "test_result": test_res,
+        "settings": settings.appminer.to_dict(mask_secrets=True),
+    }
+
+
+@app.post("/api/connectors/appminer/test")
+async def test_appminer_endpoint():
+    """Run live connection test for AppMiner Neo4j database."""
+    return await settings.appminer.test_connection()
+
+
+@app.post("/api/admin/jira/provision")
+async def run_admin_jira_provisioning(file_name: str = "jira_projects.json"):
+    """
+    Admin Endpoint: Reads JSON project specification from data/ directory and 
+    creates Projects, Components, Versions, and Issues directly in the user's connected Jira instance.
+    """
+    provisioner = JiraAdminProvisioner()
+    return await provisioner.provision_from_data_file(file_name=file_name)
+
+
+@app.post("/api/admin/jira/upload")
+async def upload_and_provision_jira(file: UploadFile = File(...)):
+    """
+    Admin Endpoint: Upload any JSON file directly via HTTP multipart upload 
+    and automatically create Projects, Components, Versions, and Issues in Jira.
+    """
+    try:
+        content = await file.read()
+        json_data = json.loads(content.decode("utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid JSON file format: {str(e)}")
+
+    provisioner = JiraAdminProvisioner()
+    return await provisioner.provision_from_json_data(json_data, source_name=f"uploaded_{file.filename}")
+
+
+
+@app.get("/api/connectors/appminer/fetch")
+@app.post("/api/connectors/appminer/fetch")
+async def fetch_appminer_data_endpoint(query: Optional[str] = None, limit: int = 100):
+    """Fetch graph nodes and data directly from Neo4j database."""
+    return await settings.appminer.fetch_data(query=query, limit=limit)
+
 
 
 @app.post("/api/connectors/test-all")

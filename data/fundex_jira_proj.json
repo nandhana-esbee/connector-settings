@@ -1,0 +1,441 @@
+{
+  "documentTitle": "Jira Project Structure Derived from Application Context",
+  "sourceApplications": [
+    {
+      "projectKey": "FINX",
+      "application": "Fundex Investor",
+      "primaryScope": "Investment management, accounts, trading, analysis, auto-invest and dividends"
+    },
+    {
+      "projectKey": "ICICI",
+      "application": "ICICI Bank",
+      "primaryScope": "Retail banking, authentication, accounts, transfers, cards, FD and support"
+    },
+    {
+      "projectKey": "CLENS",
+      "application": "Credit Lens",
+      "primaryScope": "AI credit surveillance, risk monitoring, credit memos, alerts and collaboration"
+    }
+  ],
+  "projects": [
+    {
+      "projectKey": "FINX",
+      "projectName": "Fundex Investor",
+      "goal": "Manage enhancements to the investment-management experience and its account-opening and portfolio workflows.",
+      "epics": [
+        {
+          "epicKey": "FINX-E1",
+          "name": "Dashboard & Account Experience",
+          "description": "Portfolio overview and account information.",
+          "stories": [
+            {
+              "key": "FINX-101",
+              "summary": "Dashboard portfolio summary",
+              "description": "Display total portfolio value and My Accounts overview.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-102",
+              "summary": "Account balances and holdings",
+              "description": "Expose balances, holdings and allocation, including Roth IRA details.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "FINX-E2",
+          "name": "Account Opening",
+          "description": "Multi-step investment-account application.",
+          "stories": [
+            {
+              "key": "FINX-201",
+              "summary": "Account type selection",
+              "description": "Support investment-account type selection and progression.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-202",
+              "summary": "Personal information",
+              "description": "Capture name, DOB, SSN, employment and income.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-203",
+              "summary": "Investment profile",
+              "description": "Capture risk tolerance, investment goal and time horizon.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-204",
+              "summary": "Funding details",
+              "description": "Capture funding method and initial deposit.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-205",
+              "summary": "Application review",
+              "description": "Review all entered application details before submission.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "FINX-E3",
+          "name": "Funds & Trading",
+          "description": "Fund discovery and buy/sell transaction flows.",
+          "stories": [
+            {
+              "key": "FINX-301",
+              "summary": "Fund search and filters",
+              "description": "Browse available funds with search and filter options.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-302",
+              "summary": "Buy transaction",
+              "description": "Select fund/account, enter dollar amount and preview buy order.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-303",
+              "summary": "Sell transaction",
+              "description": "Switch to sell mode, select fund/account, enter amount and preview order.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "FINX-E4",
+          "name": "Portfolio & Transaction Insights",
+          "description": "Historical transactions, cost basis and portfolio analytics.",
+          "stories": [
+            {
+              "key": "FINX-401",
+              "summary": "Transaction history",
+              "description": "Display recent transaction history.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-402",
+              "summary": "Cost basis analysis",
+              "description": "Show unrealized gains/losses per holding.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-403",
+              "summary": "Portfolio performance",
+              "description": "Show allocation, YTD/1-year returns and S&P 500 comparison.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "FINX-E5",
+          "name": "Recurring Investments & Dividends",
+          "description": "Auto-invest and dividend history.",
+          "stories": [
+            {
+              "key": "FINX-501",
+              "summary": "Auto-invest setup",
+              "description": "Support fund, account, amount, frequency, start date and confirmation.",
+              "type": "Story"
+            },
+            {
+              "key": "FINX-502",
+              "summary": "Dividend history",
+              "description": "Display dividend payment history.",
+              "type": "Story"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "projectKey": "ICICI",
+      "projectName": "ICICI Bank",
+      "goal": "Manage retail banking journeys covering authenticated access, account servicing, payments, product applications and support.",
+      "epics": [
+        {
+          "epicKey": "ICICI-E1",
+          "name": "Authentication & Account Dashboard",
+          "stories": [
+            {
+              "key": "ICICI-101",
+              "summary": "Customer login",
+              "description": "Authenticate with user ID and password and redirect to the account dashboard.",
+              "type": "Story"
+            },
+            {
+              "key": "ICICI-102",
+              "summary": "Account summary",
+              "description": "Display current balance, available balance and recent transactions.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "ICICI-E2",
+          "name": "Funds Transfer",
+          "stories": [
+            {
+              "key": "ICICI-201",
+              "summary": "Beneficiary transfer",
+              "description": "Select a registered beneficiary and enter transfer amount.",
+              "type": "Story"
+            },
+            {
+              "key": "ICICI-202",
+              "summary": "OTP confirmation",
+              "description": "Confirm transfer using OTP verification.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "ICICI-E3",
+          "name": "Credit Card Application",
+          "stories": [
+            {
+              "key": "ICICI-301",
+              "summary": "Browse credit cards",
+              "description": "Compare card options by features and benefits.",
+              "type": "Story"
+            },
+            {
+              "key": "ICICI-302",
+              "summary": "Start card application",
+              "description": "Capture personal and income details for the selected card.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "ICICI-E4",
+          "name": "Fixed Deposit",
+          "stories": [
+            {
+              "key": "ICICI-401",
+              "summary": "Create fixed deposit",
+              "description": "Select amount and tenure, review interest rate and confirm FD creation.",
+              "type": "Story"
+            },
+            {
+              "key": "ICICI-402",
+              "summary": "FD confirmation",
+              "description": "Generate confirmation containing FD account number and maturity date.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "ICICI-E5",
+          "name": "Customer Support",
+          "stories": [
+            {
+              "key": "ICICI-501",
+              "summary": "Raise service request",
+              "description": "Select request category, enter details and submit the request.",
+              "type": "Story"
+            },
+            {
+              "key": "ICICI-502",
+              "summary": "Request reference tracking",
+              "description": "Generate a reference number for submitted service requests.",
+              "type": "Story"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "projectKey": "CLENS",
+      "projectName": "Credit Lens",
+      "goal": "Manage AI-powered credit surveillance capabilities across counterparty onboarding, analysis, risk management, memo generation, alerts and collaboration.",
+      "epics": [
+        {
+          "epicKey": "CLENS-E1",
+          "name": "Counterparty Onboarding",
+          "stories": [
+            {
+              "key": "CLENS-101",
+              "summary": "Create counterparty onboarding",
+              "description": "Enter entity name, legal identifier and sector classification.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-102",
+              "summary": "Trigger initial analysis",
+              "description": "Fetch financial data, run initial risk scoring and populate the profile.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-103",
+              "summary": "Risk tier assignment",
+              "description": "Complete onboarding with an assigned risk tier.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "CLENS-E2",
+          "name": "Agentic Credit Analysis",
+          "stories": [
+            {
+              "key": "CLENS-201",
+              "summary": "Run analysis pipeline",
+              "description": "Trigger the multi-agent analysis for a selected counterparty.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-202",
+              "summary": "Monitor pipeline progress",
+              "description": "Show real-time progress across data ingestion, ratios, news sentiment and risk scoring.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "CLENS-E3",
+          "name": "Risk Flags & Early Warning",
+          "stories": [
+            {
+              "key": "CLENS-301",
+              "summary": "Review risk flags",
+              "description": "Filter active flags and inspect supporting evidence and AI rationale.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-302",
+              "summary": "Resolve or escalate flag",
+              "description": "Add a comment and resolve/escalate a flag with audit information.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-303",
+              "summary": "Review early warnings",
+              "description": "Review newly triggered alerts and underlying trend data.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-304",
+              "summary": "Assign credit review",
+              "description": "Acknowledge an alert and assign it to a senior analyst.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "CLENS-E4",
+          "name": "Credit Memo & Approval",
+          "stories": [
+            {
+              "key": "CLENS-401",
+              "summary": "Generate credit memo",
+              "description": "Generate memo sections including executive summary, financial analysis and risk assessment.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-402",
+              "summary": "Edit and submit memo",
+              "description": "Allow analyst edits and submit the memo for manager approval.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-403",
+              "summary": "Export approved memo",
+              "description": "Export the approved credit memo as PDF.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "CLENS-E5",
+          "name": "Ask AI & Counterparty Hub",
+          "stories": [
+            {
+              "key": "CLENS-501",
+              "summary": "Ask AI credit query",
+              "description": "Answer natural-language questions using credit data and financial metrics.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-502",
+              "summary": "Counterparty 360 view",
+              "description": "Display financials, risk flags, memos, news and relationship information.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-503",
+              "summary": "Quarterly financial drill-down",
+              "description": "Review quarterly financial trends for a selected entity.",
+              "type": "Story"
+            }
+          ]
+        },
+        {
+          "epicKey": "CLENS-E6",
+          "name": "Collaboration & Data Sources",
+          "stories": [
+            {
+              "key": "CLENS-601",
+              "summary": "Collaborate on analysis",
+              "description": "Add comments, tag colleagues, attach supporting documents and mark follow-up.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-602",
+              "summary": "Configure external data source",
+              "description": "Add a financial data provider connection and test the integration.",
+              "type": "Story"
+            },
+            {
+              "key": "CLENS-603",
+              "summary": "Activate verified data source",
+              "description": "Activate a tested external source for use in the analysis pipeline.",
+              "type": "Story"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "crossProjectConventions": [
+    {
+      "item": "Project",
+      "recommendedConvention": "One Jira project per application/domain: FINX, ICICI, CLENS."
+    },
+    {
+      "item": "Epic",
+      "recommendedConvention": "Major application capability or end-to-end business area."
+    },
+    {
+      "item": "Story",
+      "recommendedConvention": "A user-visible capability or workflow step supported by the source context."
+    },
+    {
+      "item": "Task",
+      "recommendedConvention": "Technical work required to implement a story, where needed."
+    },
+    {
+      "item": "Bug",
+      "recommendedConvention": "Observed defect or mismatch between expected and actual application behavior."
+    },
+    {
+      "item": "Spike",
+      "recommendedConvention": "Investigation where requirements or implementation details are not established by the source."
+    },
+    {
+      "item": "Acceptance Criteria",
+      "recommendedConvention": "Derive from the stated goal/flow and explicitly separate confirmed behavior from assumptions."
+    }
+  ],
+  "suggestedWorkflow": [
+    "Backlog",
+    "Selected for Development",
+    "In Progress",
+    "Code Review",
+    "QA",
+    "UAT",
+    "Done"
+  ]
+}

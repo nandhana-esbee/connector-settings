@@ -1,0 +1,347 @@
+{
+  "sites": [
+    {
+      "domain": "localhost:4200",
+      "name": "localhost:4200",
+      "app_context": {
+        "id": "ctx_localhost:4200",
+        "generatedAt": 1787043686580,
+        "text": "The Fundex Investor website, hosted at localhost:4200, provides tools for managing investments. Key sections include a Dashboard for portfolio overview, an Accounts page for balances and holdings, a Funds & ETFs page for browsing and investing in funds, a Transact page for buy/sell orders, a Transactions page for history, a Cost Basis page for unrealized gains/losses, a Portfolio Analysis page for performance and benchmark comparison, an Auto-Invest page for recurring investments, and a Dividends page for dividend history. The site also includes an account opening flow with multi-step form covering account type selection, personal information, investment profile, funding, and review. Navigation is direct with URL-based routing and no login required for most browsing flows."
+      },
+      "flow_summaries": [
+        {
+          "id": "summary_dashboard",
+          "flowId": "flow_dashboard",
+          "generatedAt": 1787043491000,
+          "flow_name": "Dashboard Flow",
+          "goal": "navigate to dashboard and view portfolio summary and account overview",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user navigated to the application's main URL, which immediately loaded the dashboard page. On this page, they successfully viewed their total portfolio value and an overview of their accounts in the 'My Accounts' section. The user's goal of seeing their portfolio summary and account details was fully achieved."
+        },
+        {
+          "id": "summary_accounts",
+          "flowId": "flow_accounts",
+          "generatedAt": 1787043492000,
+          "flow_name": "Accounts Flow",
+          "goal": "navigate to Accounts page and view account balances, holdings, and allocation",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user navigated directly to the Accounts page by accessing http://localhost:4200/accounts. Upon arrival, they successfully viewed their account balances, holdings (including details for a Roth IRA), and overall allocation. The content displayed on this page confirmed the user's goal of seeing their account details."
+        },
+        {
+          "id": "summary_open_account_flow",
+          "flowId": "flow_open_account",
+          "generatedAt": 1787043493000,
+          "flow_name": "Open Account Flow",
+          "goal": "on the Accounts page click the Open New Account button to navigate to the open account form",
+          "step_count": 3,
+          "mode": "agent",
+          "text": "The user began by navigating to the Accounts page. On this page, they clicked the '+ Open New Account' button. This action successfully directed them to the open account form, thereby achieving the goal of accessing the form to open a new account."
+        },
+        {
+          "id": "summary_open_account_step1",
+          "flowId": "flow_open_account_step1",
+          "generatedAt": 1787043494000,
+          "flow_name": "Open Account - Step 1 Account Type",
+          "goal": "on the open account form select an account type and click next to proceed to personal information",
+          "step_count": 4,
+          "mode": "agent",
+          "text": "The user navigated to the open account form and selected 'Investment Account' as their preferred account type. They then clicked the 'Next' button, successfully proceeding to the personal information section of the form. This action completed the first step of choosing an account type."
+        },
+        {
+          "id": "summary_open_account_step2",
+          "flowId": "flow_open_account_step2",
+          "generatedAt": 1787043495000,
+          "flow_name": "Open Account - Step 2 Personal Info",
+          "goal": "on the open account personal information step fill in name date of birth SSN employment and income then click next",
+          "step_count": 11,
+          "mode": "agent",
+          "text": "The user navigated to the open account page and selected an Investment Account before proceeding. They then reached the personal information step and filled in required fields including name, date of birth, SSN, employment status, and income details before clicking Next to advance."
+        },
+        {
+          "id": "summary_open_account_step3",
+          "flowId": "flow_open_account_step3",
+          "generatedAt": 1787043496000,
+          "flow_name": "Open Account - Step 3 Investment Profile",
+          "goal": "on the open account investment profile step select risk tolerance investment goal and time horizon then click next",
+          "step_count": 16,
+          "mode": "agent",
+          "text": "The user began by navigating to the account opening page and selecting an Investment Account. They then proceeded to the investment profile step where they selected their risk tolerance, investment goal, and time horizon before clicking Next."
+        },
+        {
+          "id": "summary_open_account_step4",
+          "flowId": "flow_open_account_step4",
+          "generatedAt": 1787043587010,
+          "flow_name": "Open Account - Step 4 Funding",
+          "goal": "on the open account funding step select a funding method enter initial deposit amount and click next",
+          "step_count": 13,
+          "mode": "agent",
+          "text": "The user began by navigating to the open account page and selecting an 'Investment Account'. They proceeded through the account type and personal information steps before reaching the funding step where they selected a funding method and entered an initial deposit amount."
+        },
+        {
+          "id": "summary_open_account_step5",
+          "flowId": "flow_open_account_step5",
+          "generatedAt": 1787043588000,
+          "flow_name": "Open Account - Step 5 Review",
+          "goal": "on the open account review step review all application details before submitting",
+          "step_count": 15,
+          "mode": "agent",
+          "text": "The user initiated the open account application by navigating to the open account page. They selected an 'Investment Account' and proceeded through all prior steps before reaching the review step where all application details were displayed for final confirmation before submission."
+        },
+        {
+          "id": "summary_funds_etfs",
+          "flowId": "flow_funds_etfs",
+          "generatedAt": 1787043497000,
+          "flow_name": "Funds & ETFs Flow",
+          "goal": "navigate to Funds and ETFs page and browse available funds with search and filter options",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user initiated the Funds & ETFs Flow by navigating directly to the Funds & ETFs page. Upon arrival, they successfully landed on the intended page. The page immediately displayed available funds along with visible search and filter options, fully achieving the goal."
+        },
+        {
+          "id": "summary_transact_buy",
+          "flowId": "flow_transact_buy",
+          "generatedAt": 1787043498000,
+          "flow_name": "Transact - Buy Flow",
+          "goal": "on the Funds page click the Invest button on a fund row to navigate to the transact page with the fund pre-selected then select an account enter a dollar amount and preview the buy order",
+          "step_count": 5,
+          "mode": "agent",
+          "text": "The user started on the Funds page and clicked the 'Invest' button for the BND fund. This action navigated them to the Transact page, where the BND fund was pre-selected. On the Transact page, the user then selected 'Roth IRA' from the account dropdown and entered a specific dollar amount to preview the buy order."
+        },
+        {
+          "id": "summary_transact_sell",
+          "flowId": "flow_transact_sell",
+          "generatedAt": 1787043499000,
+          "flow_name": "Transact - Sell Flow",
+          "goal": "on the transact page switch to sell mode select a fund select an account enter an amount and preview the sell order",
+          "step_count": 3,
+          "mode": "agent",
+          "text": "The user began by navigating to the transact page. On this page, they clicked the 'Sell' button to switch to sell mode, then selected a fund and account before entering an amount to preview the sell order."
+        },
+        {
+          "id": "summary_transactions",
+          "flowId": "flow_transactions",
+          "generatedAt": 1787043500000,
+          "flow_name": "Transactions Flow",
+          "goal": "navigate to Transactions page and view recent transaction history",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user navigated directly to the Transactions page by accessing its specific URL. Upon arrival, the page clearly displayed 'Transaction History' along with a list of recent transactions, successfully achieving the goal."
+        },
+        {
+          "id": "summary_cost_basis",
+          "flowId": "flow_cost_basis",
+          "generatedAt": 1787043501000,
+          "flow_name": "Cost Basis Flow",
+          "goal": "navigate to Cost Basis page and view unrealized gains and losses per holding",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user directly navigated to the Cost Basis page by entering its URL. On this page, they successfully viewed unrealized gains and losses broken down per holding."
+        },
+        {
+          "id": "summary_portfolio_analysis",
+          "flowId": "flow_portfolio_analysis",
+          "generatedAt": 1787043502000,
+          "flow_name": "Portfolio Analysis Flow",
+          "goal": "navigate to Portfolio Analysis page and view allocation performance returns and benchmark comparison",
+          "step_count": 2,
+          "mode": "agent",
+          "text": "The user navigated directly to the Portfolio Analysis page. Upon arrival, they successfully viewed the allocation performance returns, including YTD and 1-year returns. The page also displayed a benchmark comparison against the S&P 500, achieving the goal of analyzing portfolio performance."
+        },
+        {
+          "id": "summary_auto_invest",
+          "flowId": "flow_auto_invest",
+          "generatedAt": 1787043503000,
+          "flow_name": "Auto-Invest Flow",
+          "goal": "navigate to Auto-Invest page select a fund select an account enter an amount choose frequency and start date and confirm the auto-invest plan",
+          "step_count": 3,
+          "mode": "agent",
+          "text": "The user initiated the auto-invest flow by navigating directly to the auto-invest page at http://localhost:4200/auto-invest. This action successfully achieved the immediate goal of reaching the auto-invest setup page."
+        },
+        {
+          "id": "summary_dividends",
+          "flowId": "flow_dividends",
+          "generatedAt": 1787043504000,
+          "flow_name": "Dividends Flow",
+          "goal": "navigate to Dividends page and view dividend payment history",
+          "step_count": 3,
+          "mode": "agent",
+          "text": "The user initiated the Dividends Flow by navigating directly to the Dividends page. Once on this page, they clicked the 'Dividend History' button. This action successfully displayed the dividend payment history, achieving the goal."
+        }
+      ]
+    },
+    {
+      "domain": "www.icici.bank.in",
+      "name": "www.icici.bank.in",
+      "app_context": {
+        "id": "ctx_www.icici.bank.in",
+        "generatedAt": 1787043600000,
+        "text": "The ICICI Bank website at www.icici.bank.in is a retail banking portal offering personal and corporate banking services. Key sections include account management, credit cards, loans, investments, insurance, and digital banking services. The site supports both logged-in and guest browsing, with product pages accessible without authentication. Navigation follows a standard banking portal structure with top-level product categories and sub-pages for specific products and services."
+      },
+      "flow_summaries": [
+        {
+          "id": "summary_icici_login",
+          "flowId": "flow_icici_login",
+          "generatedAt": 1787043601000,
+          "flow_name": "Login Flow",
+          "goal": "navigate to login page and authenticate with user credentials",
+          "step_count": 5,
+          "mode": "agent",
+          "text": "The user navigated to the ICICI Bank login page and entered their user ID and password. After submitting the credentials, they were successfully authenticated and redirected to the account dashboard."
+        },
+        {
+          "id": "summary_icici_accounts",
+          "flowId": "flow_icici_accounts",
+          "generatedAt": 1787043602000,
+          "flow_name": "Account Summary Flow",
+          "goal": "view account summary including balance and recent transactions",
+          "step_count": 3,
+          "mode": "agent",
+          "text": "After logging in, the user navigated to the account summary page. The page displayed current account balance, available balance, and a list of recent transactions with dates and amounts."
+        },
+        {
+          "id": "summary_icici_funds_transfer",
+          "flowId": "flow_icici_funds_transfer",
+          "generatedAt": 1787043603000,
+          "flow_name": "Funds Transfer Flow",
+          "goal": "initiate a funds transfer to a registered beneficiary",
+          "step_count": 7,
+          "mode": "agent",
+          "text": "The user navigated to the funds transfer section, selected a registered beneficiary, entered the transfer amount, and confirmed the transaction with OTP verification. The transfer was successfully initiated."
+        },
+        {
+          "id": "summary_icici_credit_card",
+          "flowId": "flow_icici_credit_card",
+          "generatedAt": 1787043604000,
+          "flow_name": "Credit Card Application Flow",
+          "goal": "browse credit card options and initiate an application",
+          "step_count": 6,
+          "mode": "agent",
+          "text": "The user browsed the credit cards section, compared available card options by features and benefits, selected a preferred card, and initiated the application process by filling in personal and income details."
+        },
+        {
+          "id": "summary_icici_fixed_deposit",
+          "flowId": "flow_icici_fixed_deposit",
+          "generatedAt": 1787043605000,
+          "flow_name": "Fixed Deposit Flow",
+          "goal": "open a new fixed deposit with selected tenure and amount",
+          "step_count": 8,
+          "mode": "agent",
+          "text": "The user navigated to the fixed deposit section, selected the deposit amount and tenure, reviewed the interest rate, and confirmed the FD creation. The system generated a confirmation with the FD account number and maturity date."
+        },
+        {
+          "id": "summary_icici_support",
+          "flowId": "flow_icici_support",
+          "generatedAt": 1787043606000,
+          "flow_name": "Customer Support Flow",
+          "goal": "raise a service request through the customer support portal",
+          "step_count": 4,
+          "mode": "agent",
+          "text": "The user accessed the customer support section, selected the service request category, filled in the request details, and submitted the form. A reference number was generated for tracking the request."
+        }
+      ]
+    },
+    {
+      "domain": "app.creditlens.io",
+      "name": "Credit Lens",
+      "app_context": {
+        "id": "ctx_app.creditlens.io",
+        "generatedAt": 1787043700000,
+        "text": "Credit Lens is an AI-powered credit surveillance platform designed for financial analysts and credit risk teams. The platform provides end-to-end counterparty credit monitoring through an agentic pipeline that automates data ingestion, risk flag detection, credit memo generation, and early warning alerts. Key modules include: Counterparty Onboarding (multi-step pipeline for adding new entities), Agentic Credit Analysis Pipeline (automated analysis using LLM agents), Risk Flags Dashboard (real-time flag management and resolution), Credit Memo Export (structured memo generation with approval workflow), Ask AI (conversational interface for ad-hoc credit queries), Early Warning System (proactive alerts for deteriorating credits), and Counterparty Hub (360-degree view of each entity). The platform integrates with external data sources including financial databases, news feeds, and regulatory filings. Navigation is role-based with analyst and manager views."
+      },
+      "flow_summaries": [
+        {
+          "id": "summary_cl_onboarding",
+          "flowId": "flow_cl_onboarding",
+          "generatedAt": 1787043701000,
+          "flow_name": "Counterparty Onboarding Flow",
+          "goal": "onboard a new counterparty by entering entity details and triggering the analysis pipeline",
+          "step_count": 9,
+          "mode": "agent",
+          "text": "The analyst navigated to the Counterparty Onboarding section and initiated a new onboarding request. They entered the entity name, legal identifier, and sector classification. The system triggered the agentic pipeline which fetched financial data, ran initial risk scoring, and populated the counterparty profile. The onboarding was completed with a risk tier assignment."
+        },
+        {
+          "id": "summary_cl_pipeline",
+          "flowId": "flow_cl_pipeline",
+          "generatedAt": 1787043702000,
+          "flow_name": "Agentic Analysis Pipeline Flow",
+          "goal": "trigger and monitor the agentic credit analysis pipeline for a counterparty",
+          "step_count": 6,
+          "mode": "agent",
+          "text": "The user selected a counterparty and triggered the agentic analysis pipeline. The pipeline ran through multiple agents: data ingestion, financial ratio analysis, news sentiment analysis, and risk scoring. Progress was displayed in real-time. Upon completion, the analysis results were available in the counterparty profile."
+        },
+        {
+          "id": "summary_cl_flags",
+          "flowId": "flow_cl_flags",
+          "generatedAt": 1787043703000,
+          "flow_name": "Risk Flags Review Flow",
+          "goal": "review active risk flags, investigate details, and resolve or escalate flags",
+          "step_count": 7,
+          "mode": "agent",
+          "text": "The analyst navigated to the Risk Flags Dashboard and filtered for active flags. They selected a high-severity flag, reviewed the supporting evidence and AI-generated rationale, added a comment, and marked the flag as resolved after investigation. The resolution was logged with a timestamp and analyst ID."
+        },
+        {
+          "id": "summary_cl_memo",
+          "flowId": "flow_cl_memo",
+          "generatedAt": 1787043704000,
+          "flow_name": "Credit Memo Export Flow",
+          "goal": "generate and export a credit memo for a counterparty with approval workflow",
+          "step_count": 8,
+          "mode": "agent",
+          "text": "The user navigated to the Credit Memo section for a selected counterparty. They triggered memo generation, reviewed the AI-drafted memo sections including executive summary, financial analysis, and risk assessment. After editing, they submitted the memo for manager approval. The approved memo was exported as a PDF."
+        },
+        {
+          "id": "summary_cl_ask_ai",
+          "flowId": "flow_cl_ask_ai",
+          "generatedAt": 1787043705000,
+          "flow_name": "Ask AI Flow",
+          "goal": "use the Ask AI interface to query credit data and get AI-generated insights",
+          "step_count": 4,
+          "mode": "agent",
+          "text": "The analyst opened the Ask AI panel and typed a natural language query about a counterparty's recent financial performance. The AI responded with a structured answer citing specific financial metrics and flagged anomalies. The analyst followed up with a drill-down question and received a detailed breakdown."
+        },
+        {
+          "id": "summary_cl_ews",
+          "flowId": "flow_cl_ews",
+          "generatedAt": 1787043706000,
+          "flow_name": "Early Warning System Flow",
+          "goal": "review early warning alerts and take action on deteriorating credits",
+          "step_count": 5,
+          "mode": "agent",
+          "text": "The user accessed the Early Warning System dashboard and reviewed newly triggered alerts. They selected an alert for a counterparty showing deteriorating liquidity ratios, reviewed the trend data, and initiated a credit review workflow. The alert was acknowledged and assigned to a senior analyst."
+        },
+        {
+          "id": "summary_cl_counterparty_hub",
+          "flowId": "flow_cl_counterparty_hub",
+          "generatedAt": 1787043707000,
+          "flow_name": "Counterparty Hub Flow",
+          "goal": "view 360-degree counterparty profile including financials, flags, memos, and news",
+          "step_count": 6,
+          "mode": "agent",
+          "text": "The analyst navigated to the Counterparty Hub and searched for a specific entity. The hub displayed a comprehensive profile including financial summary, active risk flags, recent credit memos, news feed, and relationship map. The analyst drilled into the financials tab to review quarterly trends."
+        },
+        {
+          "id": "summary_cl_collaboration",
+          "flowId": "flow_cl_collaboration",
+          "generatedAt": 1787043708000,
+          "flow_name": "Collaboration & Comments Flow",
+          "goal": "add comments and collaborate with team members on a counterparty analysis",
+          "step_count": 4,
+          "mode": "agent",
+          "text": "The user opened a counterparty profile and navigated to the collaboration panel. They added a comment tagging a colleague, attached a supporting document, and marked the item for follow-up. The colleague received a notification and responded within the thread."
+        },
+        {
+          "id": "summary_cl_data_sources",
+          "flowId": "flow_cl_data_sources",
+          "generatedAt": 1787043709000,
+          "flow_name": "Data Sources Configuration Flow",
+          "goal": "configure and verify external data source connections for a counterparty",
+          "step_count": 5,
+          "mode": "agent",
+          "text": "The admin user navigated to the Data Sources configuration page. They added a new financial data provider connection, entered API credentials, and ran a connection test. The test returned sample data confirming the integration was working. The data source was activated for use in the analysis pipeline."
+        }
+      ]
+    }
+  ]
+}
